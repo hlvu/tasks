@@ -47,6 +47,27 @@ class TasksController extends Controller
         $task = Task::find($id);
         $task->task = $request->task;
         $task->save();
-        return response()->json(['reuslt'=>'Updated task']);
+        return response()->json(['result'=>'Updated task']);
+    }
+
+    public function search(Request $request) {
+        $q_user = $request->name;
+        $q_task = $request->task;
+        $users = User::where('name', 'LIKE', '%'.$q_user.'%')
+        ->whereHas('task', function ($query) use ($q_task) {
+            $query->where('task', 'LIKE', '%'.$q_task.'%');
+        })
+        ->with(['task' => function ($query) use ($q_task) {
+            $query->where('task', 'LIKE', '%'.$q_task.'%');
+        }])
+        ->get();
+        return response($users);
+        // foreach($users as $key => $user) {
+        // $users[$key]['task']=$user->task()-
+        // return $users->get();
+
+        // return view('user.index', [
+        //     'users' => $users,
+        // ]);
     }
 }

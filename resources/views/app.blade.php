@@ -7,6 +7,11 @@
         <title>Task List</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!-- CSS And JavaScript -->
+        <style>
+        ul {
+            list-style-type: none;
+        }
+        </style>
     </head>
 
     <body>
@@ -25,8 +30,8 @@
             function showTable(data) {
                 //view data
                 let html=`
-                <table class="table">
-                    <thead>
+                <table class="table table-striped">
+                    <thead align="center">
                         <th>Name</th>
                         <th>Task</th>
                         <th>Actions</th>
@@ -114,13 +119,15 @@
                 });
             };
 
-            //Fn:edit User
+            //Fn:show edit form
             function edit(id) {
                 $('#'+id).append(`
-                <input id="editTask"></input>
-                <button id="saveBtn" onclick="update(${id})">Save</button>
+                <input id="editTask" class="form-control"></input>
+                <button onclick="update(${id})" class="btn btn-primary">Save</button>
                 `);
             }
+
+            //Fn:save edited task
             function update(id) {
                 $.ajax({
                     url: "/task/edit/" + id,
@@ -150,6 +157,21 @@
             //AJAX: Add New Task
             $('#addBtn').click(function(e) {
                 addTask(e);
+            });
+
+            //Search
+            $('#search').click(function(e) {
+                $.ajax({
+                    url: "/search",
+                    method: "GET",
+                    data: {
+                        name: $('#name').val(),
+                        task: $('#task').val(),
+                    },
+                }).done(function(data) {
+                    $('#result').html('Search result');
+                    showTable(data);
+                });
             });
         });
         </script>
