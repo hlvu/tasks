@@ -36,8 +36,9 @@ class TasksController extends Controller
 
         return response()->json(['result'=>'Added new task']);
     }
-    // public function test(Request $request) {
-    //     $a= $request->name;
-    //     return response()->json(['message'=>$a]);
-    // }
+
+    public function delete($id) {
+        $task = Task::find($id)->delete(); 
+        return response()->json(['result'=>'Deleted task']);
+    }
 }

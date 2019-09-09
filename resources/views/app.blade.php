@@ -37,6 +37,7 @@
                     <thead>
                         <th>Name</th>
                         <th>Task</th>
+                        <th>Actions</th>
                     </thead>
                     <tbody>
                 `;
@@ -52,7 +53,13 @@
                         <li>${i.task}</li>
                         `;
                     });
-                    html += `</ul></td></tr>`
+                    html += `</ul><td><ul>`
+                    e.task.forEach(i => {
+                        html += `
+                        <li><a href="#" id="delete" style="margin:5px" val="${i.id}">X</a><a href="#" id="edit" style="margin:5px">Edit</a></li>
+                        `;
+                    })
+                    html += `</ul></td></tr>`;
                 });
                 $('#index').html(html);
 
@@ -90,6 +97,19 @@
                     }).done(function(data) {
                         showTable(data);
                     });
+                });
+            });
+
+            //AJAX: Delete A Task
+            $('#delete').click(function(e){
+                e.preventDefault();
+
+                $.ajax({
+                    url: "/task/" + $('#delete').val(), 
+                    method: 'DELETE',
+                    dataType: 'json',
+                }).done(function(result){
+                    announce(result);
                 });
             });
         });
