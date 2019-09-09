@@ -17,5 +17,6 @@ Route::post('/task', 'TasksController@store');
 Route::get('/show', 'TasksController@show');
 Route::get('/task/{id}', 'TasksController@deleteTask');
 Route::get('/user/{id}', 'TasksController@deleteUser');
+Route::get('/task/edit/{id}', 'TasksController@editTask');
 
 

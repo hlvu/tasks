@@ -15,10 +15,6 @@ class TasksController extends Controller
     public function show() {
         $users = User::with('task')->get();
         return response($users);
-        // return response()->json([
-        //     'name' => $users->name,
-        //     'task' => $users->
-        // ]);
     }
     public function store(Request $request) {
         //retrieve user if exist
@@ -41,8 +37,16 @@ class TasksController extends Controller
         $task = Task::find($id)->delete(); 
         return response()->json(['result'=>'Deleted task']);
     }
+
     public function deleteUser($id) {
         $user = User::find($id)->delete(); 
         return response()->json(['result'=>'Deleted user']);
+    }
+
+    public function editTask($id, Request $request) {
+        $task = Task::find($id);
+        $task->task = $request->task;
+        $task->save();
+        return response()->json(['reuslt'=>'Updated task']);
     }
 }

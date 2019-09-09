@@ -42,7 +42,7 @@
                     `;
                     e.task.forEach(i => {
                         html += `
-                        <li>${i.task}</li>
+                        <li id="${i.id}">${i.task}</li>
                         `;
                     });
                     html += `</ul><td><ul>`
@@ -50,7 +50,9 @@
                         html += `
                         <li>
                         <a href="#" id="delete" style="margin:5px" onclick="deleteTask(${i.id})">Delete</a>
-                        <a href="#" id="edit" style="margin:5px">Edit</a></li>
+
+                        <a href="#" id="edit" style="margin:5px" onclick="edit(${i.id})">Edit</a>
+                        </li>
                         `;
                     })
                     html += `</ul></td></tr>`;
@@ -107,6 +109,28 @@
                     method: "GET",
                     dataType: 'json',
                 }).done(function(result) {
+                    announce(result);
+                    index();
+                });
+            };
+
+            //Fn:edit User
+            function edit(id) {
+                $('#'+id).append(`
+                <input id="editTask"></input>
+                <button id="saveBtn" onclick="update(${id})">Save</button>
+                `);
+            }
+            function update(id) {
+                $.ajax({
+                    url: "/task/edit/" + id,
+                    method: "GET",
+                    dataType: 'json',
+                    data: {
+                        task: $('#editTask').val(),
+                    }
+
+                }).done(function(result){
                     announce(result);
                     index();
                 });
