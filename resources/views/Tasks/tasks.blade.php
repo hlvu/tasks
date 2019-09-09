@@ -6,9 +6,10 @@
         <form id="addTaskForm">
             User<input id="name" type="text" class="form-control">
             Task<input id="task" type="text" class="form-control">
-            <button id="addBtn" type="button" class="btn btn-primary"> Add Task </button>
+
+            <button id="addBtn" type="button" class="btn btn-primary" style="margin:10px"> Add Task </button>
+            <h4 id="result"></h4>
         </form>
-        <h1 id="result"></h1>
 
         <!-- Table -->
         <div id="index"></div>

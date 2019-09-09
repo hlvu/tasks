@@ -16,14 +16,6 @@
                     crossorigin="anonymous">
         </script>
         <script> 
-        $(document).ready(function(){
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
-
             //Fn: show action's result
             function announce(response) {
                 $('#result').html(response.result);
@@ -44,7 +36,7 @@
                 data.forEach(e => {
                     html += `
                     <tr>
-                        <td>${e.name}</td>
+                        <td>${e.name}<a href="#" onclick="deleteUser(${e.id})">X</a></td>
                         <td>
                             <ul>
                     `;
@@ -56,27 +48,29 @@
                     html += `</ul><td><ul>`
                     e.task.forEach(i => {
                         html += `
-                        <li><a href="#" id="delete" style="margin:5px" val="${i.id}">X</a><a href="#" id="edit" style="margin:5px">Edit</a></li>
+                        <li>
+                        <a href="#" id="delete" style="margin:5px" onclick="deleteTask(${i.id})">Delete</a>
+                        <a href="#" id="edit" style="margin:5px">Edit</a></li>
                         `;
                     })
                     html += `</ul></td></tr>`;
                 });
                 $('#index').html(html);
-
             }
 
-            //AJAX: View Tasks
-            $.ajax({
-                url: "/show",
-                method: "GET",
-                dataType: "json",
-            }).done(function(data) {
-                showTable(data);
-            });
+            //Ajax Request Data
+            function index() {
+                $.ajax({
+                    url: "/show",
+                    method: "GET",
+                    dataType: "json",
+                }).done(function(data) {
+                    showTable(data);
+                });
+            };
             
-
-            //AJAX: Add New Task
-            $('#addBtn').click(function(e){
+            //Ajax Post New Task
+            function addTask(e){
                 e.preventDefault();
 
                 $.ajax({
@@ -90,27 +84,48 @@
                 }).done(function(result) {
                     announce(result);
                     //Refresh data table
-                    $.ajax({
-                        url: "/show",
-                        method: "GET",
-                        dataType: "json",
-                    }).done(function(data) {
-                        showTable(data);
-                    });
+                    index();
                 });
+            };
+
+            //Fn:delete Task
+            function deleteTask(id) {
+                $.ajax({
+                    url: "/task/" + id,
+                    method: "GET",
+                    dataType: 'json',
+                }).done(function(result) {
+                    announce(result);
+                    index();
+                });
+            };
+
+            //Fn:delete User
+            function deleteUser(id) {
+                $.ajax({
+                    url: "/user/" + id,
+                    method: "GET",
+                    dataType: 'json',
+                }).done(function(result) {
+                    announce(result);
+                    index();
+                });
+            };
+
+        $(document).ready(function(){
+            //csrf
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
             });
 
-            //AJAX: Delete A Task
-            $('#delete').click(function(e){
-                e.preventDefault();
+            //show data
+            index();
 
-                $.ajax({
-                    url: "/task/" + $('#delete').val(), 
-                    method: 'DELETE',
-                    dataType: 'json',
-                }).done(function(result){
-                    announce(result);
-                });
+            //AJAX: Add New Task
+            $('#addBtn').click(function(e) {
+                addTask(e);
             });
         });
         </script>
