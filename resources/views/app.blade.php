@@ -27,7 +27,7 @@
         <script> 
             //Fn: show action's result
             function announce(response) {
-                $('#result').html(response.result);
+                $('#message').html(response.result);
             };
 
             //Fn: render html from data
@@ -81,8 +81,7 @@
             };
             
             //Ajax Post New Task
-            function addTask(e){
-                e.preventDefault();
+            function addTask(){
 
                 $.ajax({
                     url: "/task",
@@ -92,10 +91,21 @@
                         name: $('#name').val(),
                         task: $('#task').val(),
                     },
-                }).done(function(result) {
-                    announce(result);
-                    //Refresh data table
+                })
+                .done(function(response) {
+                    announce(response);
+                    // Refresh table
                     index();
+                })
+                .fail(function(response) {
+                    let json = $.parseJSON(response.responseText);
+                    // Show errors
+                    let str="<ul>"
+                    Object.keys(json.errors).forEach(e => {
+                        str += "<li>" + json.errors[e] +"</li>";
+                    })
+                    str+="</ul>";
+                    $('#errors').html(str);
                 });
             };
 
@@ -147,6 +157,43 @@
                 });
             };
 
+
+            //livesearch
+            function liveSearch() {
+                $.ajax({
+                    url: "/search",
+                    method: "GET",
+                    data: {
+                        name: $('#name').val(),
+                        task: $('#task').val(),
+                    },
+                }).done(function(data) {
+                    $('#message').html('Search result');
+                    showTable(data);
+                });
+            };
+
+            //form validation
+            function nameInvalid() {
+                // $('#userError').html('User name must be longer than 6 chars');
+                $('#name').addClass('is-invalid');
+                $('#userLabel').addClass('text-danger');
+            }
+            function nameValid() {
+                // $('#userError').html('');
+                $('#name').removeClass('is-invalid').addClass('is-valid');
+                $('#userLabel').removeClass('text-danger');
+            }
+            function taskInvalid() {
+                // $('#taskError').html('Task required');
+                $('#task').addClass('is-invalid');
+                $('#taskLabel').addClass('text-danger');
+            }
+            function taskValid() {
+                // $('#taskError').html('');
+                $('#task').removeClass('is-invalid').addClass('is-valid');
+                $('#taskLabel').removeClass('text-danger');
+            }
         $(document).ready(function(){
             //csrf
             $.ajaxSetup({
@@ -158,13 +205,28 @@
             //show data
             index();
 
-            //AJAX: Add New Task
-            $('#addBtn').click(function(e) {
-                addTask(e);
+            //Add New Task
+            $('#addBtn').click(function() {
+                //client-side validation
+                    //validate username
+                // if($('#name').val().length < 6) {
+                //     nameInvalid();
+                // } else {
+                //     nameValid();
+                // };
+                //     //validate task
+                // if($('#task').val() === '' ) {
+                //     taskInvalid();
+                // } else {
+                //     taskValid();
+                // };
+                //     //add Task
+                // if($('#name').val().length >= 6 && $('#task').val() !== '') 
+                addTask();
             });
 
             //Search
-            $('#search').click(function(e) {
+            $('#search').click(function() {
                 $.ajax({
                     url: "/search",
                     method: "GET",
@@ -173,9 +235,25 @@
                         task: $('#task').val(),
                     },
                 }).done(function(data) {
-                    $('#result').html('Search result');
+                    $('#message').html('Search result');
                     showTable(data);
                 });
+            });
+            
+            //live search
+            $('#name, #task').keyup(function(){
+                liveSearch();
+                if($('#name').val().length < 6) {
+                    nameInvalid();
+                } else {
+                    nameValid();
+                };
+                    //validate task
+                if($('#task').val() === '' ) {
+                    taskInvalid();
+                } else {
+                    taskValid();
+                };
             });
         });
         </script>

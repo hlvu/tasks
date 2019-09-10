@@ -4,18 +4,33 @@
     <div class="col-sm-4">
         <!-- Add Task Form -->
         <form id="addTaskForm">
-            User<input id="name" type="text" class="form-control">
-            Task<input id="task" type="text" class="form-control">
-
             <div class="row">
-                <div class="col-xs-3">
-                <button id="addBtn" type="button" class="btn btn-primary" style="margin:10px"> Add Task </button>
+                <div class="col-md-8">
+                <b id="userLabel">User</b>
+                <input id="name" type="text" class="form-control">
+                <small id=userError class="text-danger"></small>
+                
+                <br>
+
+                <b id="taskLabel">Task</b>
+                <input id="task" type="text" class="form-control">
+                <small id=taskError class="text-danger"></small>
                 </div>
-                <div class="col-xs-3">
-                <button id="search" type="button" class="btn btn-info" style="margin:10px">Search</button>
+                <div id="errors" class="col-md-4">
+                <!-- Errors -->
                 </div>
             </div>
-            <h4 id="result"></h4>
+            <div class="row">
+                <div class="col-xs-4">
+                <button id="addBtn" type="button" class="btn btn-primary" style="margin:10px"> Add </button>
+                </div>
+                <div class="col-xs-4">
+                <button id="search" type="button" class="btn btn-info" style="margin:10px">Search</button>
+                </div>
+                <div class="col-sm-5">
+                <h4 id="message"></h4>
+                </div>
+            </div>
         </form>
 
         <!-- Table -->

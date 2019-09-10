@@ -19,4 +19,5 @@ Route::get('/task/{id}', 'TasksController@deleteTask');
 Route::get('/user/{id}', 'TasksController@deleteUser');
 Route::get('/task/edit/{id}', 'TasksController@editTask');
 Route::get('/search', 'TasksController@search');
+// Route::get('/liveSearchUser', 'TasksController@liveSearchUser');
 

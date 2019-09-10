@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\addTaskRequest;
 use App\User;
 use App\Task;
 class TasksController extends Controller
@@ -15,21 +16,38 @@ class TasksController extends Controller
         $users = User::with('task')->get();
         return response($users);
     }
-    public function store(Request $request) {
-        //retrieve user if exist
-        $user = User::where('name', '=', $request->name)->first();
-        //else create new user
-        if ($user === null) {
-            $user = new User;
-            $user->name = $request->name;
-            $user->save();
-        }
-        //new task
-        $task = new Task;
-        $task->task = $request->task;
-        $user->task()->save($task);
+    public function store(addTaskRequest $request) {
+        //validator
+        // $validator = $request->validated();
 
-        return response()->json(['result'=>'Added new task']);
+        // if($validator->fails()) {
+        //     return response()->json(['errors'=>$validator->errors()->all()]);
+        // }
+
+        $q_name = $request->name;
+        $q_task = $request->task;
+        
+        //check if user's name-task pair exist
+        $user = User::where('name', '=', $q_name)
+        ->whereHas('task', function ($query) use ($q_task) {
+            $query->where('task', '=', $q_task);
+        })->first();
+        if($user === null) {
+            //retrieve user if exist
+            $user = User::where('name', '=', $q_name)->first();
+            //else create new user
+            if ($user === null) {
+                $user = new User;
+                $user->name = $q_name;
+                $user->save();
+            }
+            //new task
+            $task = new Task;
+            $task->task = $q_task;
+            $user->task()->save($task);
+
+            return response()->json(['result'=>'Added new task']);
+        } else return response()->json(['result'=>'Existed task']);
     }
 
     public function deleteTask($id) {
@@ -50,9 +68,9 @@ class TasksController extends Controller
     }
 
     public function search(Request $request) {
-        $q_user = $request->name;
+        $q_name = $request->name;
         $q_task = $request->task;
-        $users = User::where('name', 'LIKE', '%'.$q_user.'%')
+        $user = User::where('name', 'LIKE', '%'.$q_name.'%')
         ->whereHas('task', function ($query) use ($q_task) {
             $query->where('task', 'LIKE', '%'.$q_task.'%');
         })
@@ -60,6 +78,13 @@ class TasksController extends Controller
             $query->where('task', 'LIKE', '%'.$q_task.'%');
         }])
         ->get();
-        return response($users);
+        return response($user);
+    }
+
+    public function liveSearchUser(Request $request) {
+        $q = $request->q;
+        $user=User::where('name', 'LIKE', $q)->first();
+        if($user !== null) return response()->json(["result"=>'existed']);
+        else return response()->json(["result"=>'']);
     }
 }
