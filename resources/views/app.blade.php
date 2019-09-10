@@ -115,8 +115,8 @@
                     url: "/task/" + id,
                     method: "GET",
                     dataType: 'json',
-                }).done(function(result) {
-                    announce(result);
+                }).done(function(response) {
+                    announce(response);
                     index();
                 });
             };
@@ -127,8 +127,8 @@
                     url: "/user/" + id,
                     method: "GET",
                     dataType: 'json',
-                }).done(function(result) {
-                    announce(result);
+                }).done(function(response) {
+                    announce(response);
                     index();
                 });
             };
@@ -151,8 +151,8 @@
                         task: $('#editTask').val(),
                     }
 
-                }).done(function(result){
-                    announce(result);
+                }).done(function(response){
+                    announce(response);
                     index();
                 });
             };
