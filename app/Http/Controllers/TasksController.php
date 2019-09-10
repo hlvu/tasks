@@ -7,7 +7,6 @@ use App\User;
 use App\Task;
 class TasksController extends Controller
 {
-    //
     public function index() {
         return view('Tasks.tasks');
     }
@@ -62,12 +61,5 @@ class TasksController extends Controller
         }])
         ->get();
         return response($users);
-        // foreach($users as $key => $user) {
-        // $users[$key]['task']=$user->task()-
-        // return $users->get();
-
-        // return view('user.index', [
-        //     'users' => $users,
-        // ]);
     }
 }
