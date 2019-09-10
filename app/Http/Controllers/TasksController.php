@@ -16,13 +16,8 @@ class TasksController extends Controller
         $users = User::with('task')->get();
         return response($users);
     }
-    public function store(addTaskRequest $request) {
-        //validator
-        // $validator = $request->validated();
 
-        // if($validator->fails()) {
-        //     return response()->json(['errors'=>$validator->errors()->all()]);
-        // }
+    public function store(addTaskRequest $request) {
 
         $q_name = $request->name;
         $q_task = $request->task;

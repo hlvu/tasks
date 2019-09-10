@@ -5,18 +5,18 @@
         <!-- Add Task Form -->
         <form id="addTaskForm">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-10">
                 <b id="userLabel">User</b>
-                <input id="name" type="text" class="form-control">
+                <input id="name" type="text" class="form-control" placeholder="Name">
                 <small id=userError class="text-danger"></small>
                 
                 <br>
 
                 <b id="taskLabel">Task</b>
-                <input id="task" type="text" class="form-control">
+                <textarea id="task" type="text" class="form-control" rows="4" cols="50" placeholder="Description"></textarea>
                 <small id=taskError class="text-danger"></small>
                 </div>
-                <div id="errors" class="col-md-4">
+                <div id="errors" class="col-md-8">
                 <!-- Errors -->
                 </div>
             </div>

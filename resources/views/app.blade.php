@@ -157,9 +157,8 @@
                 });
             };
 
-
-            //livesearch
-            function liveSearch() {
+            //search
+            function search() {
                 $.ajax({
                     url: "/search",
                     method: "GET",
@@ -171,29 +170,29 @@
                     $('#message').html('Search result');
                     showTable(data);
                 });
-            };
-
+            }
             //form validation
             function nameInvalid() {
-                // $('#userError').html('User name must be longer than 6 chars');
+                $('#userError').html('>=6 chars');
                 $('#name').addClass('is-invalid');
                 $('#userLabel').addClass('text-danger');
             }
             function nameValid() {
-                // $('#userError').html('');
+                $('#userError').html('');
                 $('#name').removeClass('is-invalid').addClass('is-valid');
                 $('#userLabel').removeClass('text-danger');
             }
             function taskInvalid() {
-                // $('#taskError').html('Task required');
+                $('#taskError').html('Required');
                 $('#task').addClass('is-invalid');
                 $('#taskLabel').addClass('text-danger');
             }
             function taskValid() {
-                // $('#taskError').html('');
+                $('#taskError').html('');
                 $('#task').removeClass('is-invalid').addClass('is-valid');
                 $('#taskLabel').removeClass('text-danger');
             }
+            
         $(document).ready(function(){
             //csrf
             $.ajaxSetup({
@@ -226,23 +225,15 @@
             });
 
             //Search
-            $('#search').click(function() {
-                $.ajax({
-                    url: "/search",
-                    method: "GET",
-                    data: {
-                        name: $('#name').val(),
-                        task: $('#task').val(),
-                    },
-                }).done(function(data) {
-                    $('#message').html('Search result');
-                    showTable(data);
-                });
+            $('#search').click(function(){
+                search();
             });
-            
-            //live search
+
+            //search + JS validation during typing
             $('#name, #task').keyup(function(){
-                liveSearch();
+                //live search
+                search();
+                    //validate name
                 if($('#name').val().length < 6) {
                     nameInvalid();
                 } else {
