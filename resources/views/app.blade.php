@@ -82,7 +82,6 @@
             
             //Ajax Post New Task
             function addTask(){
-
                 $.ajax({
                     url: "/task",
                     method: 'POST',

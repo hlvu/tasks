@@ -75,11 +75,4 @@ class TasksController extends Controller
         ->get();
         return response($user);
     }
-
-    public function liveSearchUser(Request $request) {
-        $q = $request->q;
-        $user=User::where('name', 'LIKE', $q)->first();
-        if($user !== null) return response()->json(["result"=>'existed']);
-        else return response()->json(["result"=>'']);
-    }
 }
